@@ -7,7 +7,13 @@ ENV/
 # Python cache
 __pycache__/
 *.py[cod]
-*$py.class
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
 
 # Jupyter
 .ipynb_checkpoints/
@@ -20,9 +26,12 @@ build/
 dist/
 *.egg-info/
 
-# VS Code settings
+# IDEs
 .vscode/
+.idea/
+*.swp
+*.swo
 
-# system files
+# OS
 .DS_Store
 Thumbs.db
