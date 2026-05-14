@@ -1,0 +1,27 @@
+{
+    "model": "eegnet",
+    "condition": "closed",
+    "aggregation": "majority_vote",
+    "num_folds": 5,
+    "config_path": "C:\\Users\\jhon0\\Documents\\UTP\\Work\\MultimodalAnalysis\\configs\\preprocessing.yaml",
+    "scale_to_uv": true,
+    "reject_p2p_uv": 300.0,
+    "global_confusion_matrix": [
+        [
+            1,
+            6,
+            4
+        ],
+        [
+            4,
+            4,
+            3
+        ],
+        [
+            2,
+            6,
+            6
+        ]
+    ],
+    "save_dir": "C:\\Users\\jhon0\\Documents\\UTP\\Work\\MultimodalAnalysis\\models\\eegnet_2s_01_25_clean_p2p300\\eegnet\\closed\\majority_vote"
+}

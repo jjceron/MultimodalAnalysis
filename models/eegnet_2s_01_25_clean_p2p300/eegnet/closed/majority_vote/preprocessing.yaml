@@ -18,7 +18,7 @@ eeg:
  
   # Scale to μV  
   scale_to_uv: true
-  reject_p2p_uv: null
+  reject_p2p_uv: 300.0
 
 ## Questionnaire preprocessing
 questionnaire:

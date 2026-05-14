@@ -1,0 +1,202 @@
+{
+    "fold": 1,
+    "best_epoch": 27,
+    "best_val_subject_balanced_accuracy": 0.4444444444444444,
+    "aggregation": "majority_vote",
+    "train_label_counts": [
+        7,
+        7,
+        8
+    ],
+    "class_weights": [
+        1.0434782608695652,
+        1.0434782608695652,
+        0.9130434782608695
+    ],
+    "test_subject_accuracy": 0.5,
+    "test_subject_balanced_accuracy": 0.4444444444444444,
+    "test_subject_macro_precision": 0.4761904761904762,
+    "test_subject_macro_recall": 0.4444444444444444,
+    "test_subject_macro_f1": 0.3666666666666667,
+    "test_subject_macro_auc_ovr": 0.6388888888888888,
+    "test_subjects": [
+        0,
+        1,
+        4,
+        6,
+        19,
+        30,
+        37,
+        40
+    ],
+    "test_y_true": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        0,
+        0,
+        1
+    ],
+    "test_y_pred": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        1,
+        1,
+        1
+    ],
+    "test_subject_details": [
+        {
+            "subject_id": 0,
+            "true_label": 2,
+            "pred_label": 1,
+            "votes": [
+                0,
+                296,
+                2
+            ],
+            "mean_prob": [
+                0.1742209792137146,
+                0.4318380653858185,
+                0.39394113421440125
+            ],
+            "n_epochs": 298
+        },
+        {
+            "subject_id": 1,
+            "true_label": 1,
+            "pred_label": 1,
+            "votes": [
+                0,
+                299,
+                5
+            ],
+            "mean_prob": [
+                0.1766863316297531,
+                0.42335280776023865,
+                0.39996060729026794
+            ],
+            "n_epochs": 304
+        },
+        {
+            "subject_id": 4,
+            "true_label": 1,
+            "pred_label": 1,
+            "votes": [
+                0,
+                301,
+                3
+            ],
+            "mean_prob": [
+                0.1768762320280075,
+                0.424221396446228,
+                0.3989023268222809
+            ],
+            "n_epochs": 304
+        },
+        {
+            "subject_id": 6,
+            "true_label": 2,
+            "pred_label": 1,
+            "votes": [
+                0,
+                291,
+                13
+            ],
+            "mean_prob": [
+                0.1761147528886795,
+                0.42080166935920715,
+                0.4030837118625641
+            ],
+            "n_epochs": 304
+        },
+        {
+            "subject_id": 19,
+            "true_label": 2,
+            "pred_label": 2,
+            "votes": [
+                0,
+                66,
+                238
+            ],
+            "mean_prob": [
+                0.17081592977046967,
+                0.41046980023384094,
+                0.4187142848968506
+            ],
+            "n_epochs": 304
+        },
+        {
+            "subject_id": 30,
+            "true_label": 0,
+            "pred_label": 1,
+            "votes": [
+                10,
+                234,
+                60
+            ],
+            "mean_prob": [
+                0.20386657118797302,
+                0.40193870663642883,
+                0.39419475197792053
+            ],
+            "n_epochs": 304
+        },
+        {
+            "subject_id": 37,
+            "true_label": 0,
+            "pred_label": 1,
+            "votes": [
+                0,
+                292,
+                12
+            ],
+            "mean_prob": [
+                0.17197947204113007,
+                0.43371978402137756,
+                0.39430081844329834
+            ],
+            "n_epochs": 304
+        },
+        {
+            "subject_id": 40,
+            "true_label": 1,
+            "pred_label": 1,
+            "votes": [
+                0,
+                303,
+                1
+            ],
+            "mean_prob": [
+                0.178069069981575,
+                0.4285603165626526,
+                0.3933705687522888
+            ],
+            "n_epochs": 304
+        }
+    ],
+    "test_confusion_matrix": [
+        [
+            0,
+            2,
+            0
+        ],
+        [
+            0,
+            3,
+            0
+        ],
+        [
+            0,
+            2,
+            1
+        ]
+    ],
+    "model_path": "C:\\Users\\jhon0\\Documents\\UTP\\Work\\MultimodalAnalysis\\models\\eegnet_2s_01_25_p2pnull\\eegnet\\closed\\majority_vote\\fold_01_best.pt",
+    "history_csv": "C:\\Users\\jhon0\\Documents\\UTP\\Work\\MultimodalAnalysis\\models\\eegnet_2s_01_25_p2pnull\\eegnet\\closed\\majority_vote\\fold_01_history.csv",
+    "training_plot": "C:\\Users\\jhon0\\Documents\\UTP\\Work\\MultimodalAnalysis\\models\\eegnet_2s_01_25_p2pnull\\eegnet\\closed\\majority_vote\\fold_01_training_plot.png"
+}
