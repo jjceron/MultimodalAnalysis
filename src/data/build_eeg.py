@@ -6,6 +6,7 @@ from collections import Counter
 import mne
 import pandas as pd
 import torch
+import numpy as np
 
 from sklearn.model_selection import StratifiedGroupKFold
 from torch.utils.data import Dataset, DataLoader
@@ -24,7 +25,6 @@ from src.utils.eeg_utils import (
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "preprocessing.yaml"
 EYES_SPLIT_SEC = 300.0
-
 
 class EEGDataset(Dataset):
     def __init__(
@@ -74,6 +74,7 @@ class EEGDataset(Dataset):
         self.overlap = overlap if overlap is not None else eeg_cfg.get("overlap", 0.5)
         self.target_fs = eeg_cfg.get("target_fs", 128)
         self.scale_to_uv = bool(eeg_cfg.get("scale_to_uv", True))
+        self.reject_p2p_uv = eeg_cfg.get("reject_p2p_uv", None)
 
         yaml_condition = eeg_cfg.get("condition", "complete")
         self.condition = normalize_condition(
@@ -181,8 +182,32 @@ class EEGDataset(Dataset):
             print(f"No epochs were generated for {file_path}")
             return None, None
 
+        eeg_data_uv = eeg_data * 1e6
+
+        original_n_epochs = int(eeg_data.shape[0])
+        rejected_n_epochs = 0
+        kept_n_epochs = original_n_epochs
+
+        if self.reject_p2p_uv is not None:
+            p2p_uv = np.ptp(eeg_data_uv, axis=2)
+            good_epoch_mask = np.all(p2p_uv <= float(self.reject_p2p_uv), axis=1)
+
+            rejected_n_epochs = int(np.sum(~good_epoch_mask))
+            kept_n_epochs = int(np.sum(good_epoch_mask))
+
+            if kept_n_epochs == 0:
+                print(
+                    f"All epochs were rejected for {file_path} "
+                    f"using reject_p2p_uv={self.reject_p2p_uv}"
+                )
+                return None, None
+
+            epochs = epochs[good_epoch_mask]
+            eeg_data = eeg_data[good_epoch_mask]
+            eeg_data_uv = eeg_data_uv[good_epoch_mask]
+
         if self.scale_to_uv:
-            eeg_data = eeg_data * 1e6
+            eeg_data = eeg_data_uv
 
         metadata = build_epoch_metadata(
             eeg_data=eeg_data,
@@ -194,6 +219,14 @@ class EEGDataset(Dataset):
             overlap=self.overlap,
             eyes_split_sec=EYES_SPLIT_SEC,
         )
+
+        metadata["artifact_rejection"] = {
+            "reject_p2p_uv": self.reject_p2p_uv,
+            "original_n_epochs": original_n_epochs,
+            "kept_n_epochs": kept_n_epochs,
+            "rejected_n_epochs": rejected_n_epochs,
+            "rejected_fraction": rejected_n_epochs / max(original_n_epochs, 1),
+        }
 
         return eeg_data, metadata
 
@@ -215,6 +248,7 @@ class EEGDataset(Dataset):
         for idx, sample in enumerate(self.samples):
             metadata = sample["metadata"]
             selected_eeg = self.get_eeg(idx)
+            artifact_info = metadata.get("artifact_rejection", {})
 
             rows.append(
                 {
@@ -236,6 +270,11 @@ class EEGDataset(Dataset):
                     "open_shape": metadata["open_shape"],
                     "closed_shape": metadata["closed_shape"],
                     "selected_shape": tuple(selected_eeg.shape),
+                    "reject_p2p_uv": artifact_info.get("reject_p2p_uv"),
+                    "original_n_epochs_before_rejection": artifact_info.get("original_n_epochs"),
+                    "kept_n_epochs_after_rejection": artifact_info.get("kept_n_epochs"),
+                    "rejected_n_epochs": artifact_info.get("rejected_n_epochs"),
+                    "rejected_fraction": artifact_info.get("rejected_fraction"),
                 }
             )
 
@@ -252,7 +291,6 @@ class EEGDataset(Dataset):
             self.get_eeg(idx),
             sample["label"],
         )
-
 
 def create_kfold_dataloaders(dataset, k=10, batch_size=32, shuffle=True):
     subjects, labels, eeg_data = [], [], []
@@ -366,6 +404,13 @@ if __name__ == "__main__":
 
     print("\nClass distribution")
     print(summary["label_name"].value_counts())
+
+    print(f"Reject P2P: {dataset.reject_p2p_uv} uV")
+    print(f"Rejected epochs total: {int(summary['rejected_n_epochs'].sum())}")
+    print(
+        "Rejected fraction mean:",
+        round(float(summary["rejected_fraction"].mean()), 4),
+    )
 
     print("\nCondition sizes")
     for condition, column in [

@@ -450,7 +450,6 @@ def parse_args():
     parser.add_argument("--seed", type=int, default=3407)
     parser.add_argument("--save_root", type=str, default="models")
     parser.add_argument("--experiment_name", type=str, default="eeg_baseline")
-    parser.add_argument("--scale_to_uv", action="store_true")
 
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--start_fold", type=int, default=1)
@@ -490,10 +489,9 @@ if __name__ == "__main__":
     shutil.copy2(config_path, save_dir / "preprocessing.yaml")
 
     dataset = EEGDataset(
+        config_path=config_path,
         condition=args.condition,
-        scale_to_uv=args.scale_to_uv,
     )
-
     summary = dataset.get_summary_dataframe()
 
     n_channels = int(summary["n_channels"].iloc[0])
@@ -508,6 +506,9 @@ if __name__ == "__main__":
     print(f"Subjects: {len(dataset)}")
     print(f"Class distribution: {dict(summary['label_name'].value_counts())}")
     print(f"Selected EEG shape: ({total_epochs}, {n_channels}, {n_samples})")
+    print(f"Config path: {dataset.config_path}")
+    print(f"Scale to uV: {dataset.scale_to_uv}")
+    print(f"Reject P2P uV: {dataset.reject_p2p_uv}")
 
     folds = create_kfold_dataloaders(
         dataset,
@@ -786,7 +787,8 @@ if __name__ == "__main__":
             "aggregation": args.aggregation,
             "num_folds": args.k,
             "config_path": str(config_path),
-            "scale_to_uv": args.scale_to_uv,
+            "scale_to_uv": dataset.scale_to_uv,
+            "reject_p2p_uv": dataset.reject_p2p_uv,
             "global_confusion_matrix": global_cm.tolist(),
             "save_dir": str(save_dir),
         },
