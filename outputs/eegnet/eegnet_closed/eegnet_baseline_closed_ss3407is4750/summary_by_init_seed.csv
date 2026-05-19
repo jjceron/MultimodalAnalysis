@@ -1,0 +1,2 @@
+init_seed,n_runs,mean_test_bacc,std_test_bacc,mean_test_acc,std_test_acc,mean_test_macro_f1,std_test_macro_f1,frac_test_bacc_gt_chance,frac_test_bacc_gt_majority
+4750,5,0.45555555555555555,0.22703129713002834,0.4428571428571429,0.24948927423675685,0.3855026455026455,0.2759703353447864,0.4,0.4

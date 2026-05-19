@@ -2,8 +2,8 @@
 eeg:
   raw_data_dir: "data/raw"
   output_dir: "data/processed/EEG"
-  lowcut: 1.0
-  highcut: 25.0
+  lowcut: 0.5
+  highcut: 45.0
   notch: null
   window_duration: 2.0
   overlap: 0.5         
