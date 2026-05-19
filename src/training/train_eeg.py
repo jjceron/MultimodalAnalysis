@@ -29,6 +29,7 @@ from sklearn.metrics import (
 from src.data.build_eeg import EEGDataset, create_kfold_dataloaders
 from src.models.eegformer import EEGFormer
 from src.models.eegnet import EEGNet
+from src.models.eegnetattention import EEGNetAttention
 from src.utils.plotting import plot_fold_training_history
 
 
@@ -432,7 +433,7 @@ def parse_args():
         "--model",
         type=str,
         default="eegformer",
-        choices=["eegformer", "eegnet"],
+        choices=["eegformer", "eegnet", "eegnetattention"],
     )
     parser.add_argument(
         "--aggregation",

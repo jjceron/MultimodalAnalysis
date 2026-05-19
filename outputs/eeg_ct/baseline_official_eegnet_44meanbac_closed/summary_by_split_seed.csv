@@ -1,0 +1,2 @@
+split_seed,n_runs,mean_test_bacc,std_test_bacc,mean_test_acc,std_test_acc,mean_test_macro_f1,std_test_macro_f1,frac_test_bacc_gt_chance,frac_test_bacc_gt_majority
+3407,15,0.4444444444444444,0.11501092655705904,0.44285714285714284,0.14352522355292943,0.33451499118165784,0.16616226408496476,0.6,0.6
